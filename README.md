@@ -1,4 +1,6 @@
-## ComfyUI JoyTag Node
+# ComfyUI JoyTag Node
+
+[English][<a href="README_ja.md">日本語</a>]
 
 Only the JoyTag Node is cut out from [ComfyUI_VLM_nodes](https://github.com/gokayfem/ComfyUI_VLM_nodes).
 
