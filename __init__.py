@@ -1,6 +1,4 @@
-import importlib.util
 import os
-import importlib
 import pkg_resources
 import sys
 import subprocess
@@ -9,13 +7,13 @@ import folder_paths
 supported_LLava_extensions = set(['.gguf'])
 
 try:
-    folder_paths.folder_names_and_paths["LLavacheckpoints"] = (folder_paths.folder_names_and_paths["LLavacheckpoints"][0], supported_LLava_extensions)
+    folder_paths.folder_names_and_paths["joytag"] = (folder_paths.folder_names_and_paths["joytag"][0], supported_LLava_extensions)
 except:
-    # check if LLavacheckpoints exists otherwise create
-    if not os.path.isdir(os.path.join(folder_paths.models_dir, "LLavacheckpoints")):
-        os.mkdir(os.path.join(folder_paths.models_dir, "LLavacheckpoints"))
+    # check if joytag exists otherwise create
+    if not os.path.isdir(os.path.join(folder_paths.models_dir, "joytag")):
+        os.mkdir(os.path.join(folder_paths.models_dir, "joytag"))
         
-    folder_paths.folder_names_and_paths["LLavacheckpoints"] = ([os.path.join(folder_paths.models_dir, "LLavacheckpoints")], supported_LLava_extensions)
+    folder_paths.folder_names_and_paths["joytag"] = ([os.path.join(folder_paths.models_dir, "joytag")], supported_LLava_extensions)
 
 # Define the check_requirements_installed function here or import it
 def check_requirements_installed(requirements_path):
@@ -39,41 +37,7 @@ def check_requirements_installed(requirements_path):
 requirements_path  = os.path.join(os.path.dirname(os.path.realpath(__file__)), "requirements.txt")
 check_requirements_installed(requirements_path)
 
-from .install_init import init, get_system_info, install_llama
-system_info = get_system_info()
-install_llama(system_info)
-llama_cpp_agent_path  = os.path.join(os.path.dirname(os.path.realpath(__file__)), "cpp_agent_req.txt")
-check_requirements_installed(llama_cpp_agent_path)
 
-init()
+from .nodes.joytag import NODE_CLASS_MAPPINGS, NODE_DISPLAY_NAME_MAPPINGS
+__all__ = ['NODE_CLASS_MAPPINGS', 'NODE_DISPLAY_NAME_MAPPINGS']
 
-node_list = [
-    "audioldm2",
-    "joytag",
-    "kosmos2",
-    "llavaloader",
-    "mcllava",
-    "minicpm",
-    "molmo",
-    "moondream2",
-    "moondream_script",
-    "paligemma",
-    "playmusic",
-    "qwen2vl",
-    "simpletext",
-    "suggest",
-    "uform",
-]
-
-NODE_CLASS_MAPPINGS = {}
-NODE_DISPLAY_NAME_MAPPINGS = {}
-
-for module_name in node_list:
-    imported_module = importlib.import_module(f".nodes.{module_name}", __name__)
-
-    NODE_CLASS_MAPPINGS = {**NODE_CLASS_MAPPINGS, **imported_module.NODE_CLASS_MAPPINGS}
-    NODE_DISPLAY_NAME_MAPPINGS = {**NODE_DISPLAY_NAME_MAPPINGS, **imported_module.NODE_DISPLAY_NAME_MAPPINGS}
-
-
-WEB_DIRECTORY = "./web"
-__all__ = ["NODE_CLASS_MAPPINGS", "NODE_DISPLAY_NAME_MAPPINGS", "WEB_DIRECTORY"]

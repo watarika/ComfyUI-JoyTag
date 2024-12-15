@@ -4,32 +4,16 @@ import torch.amp.autocast_mode
 from pathlib import Path
 import torch
 import torchvision.transforms.functional as TVF
-from huggingface_hub import snapshot_download
 from torchvision import transforms
 import folder_paths
 
 THRESHOLD = 0.4
 
 # Define your local directory where you want to save the files
-files_for_joytagger = Path(folder_paths.folder_names_and_paths["LLavacheckpoints"][0][0]) / "files_for_joytagger"
+files_for_joytagger = Path(folder_paths.folder_names_and_paths["joytag"][0][0])
 
 # Check if the directory exists, create if it doesn't (optional)
 files_for_joytagger.mkdir(parents=True, exist_ok=True)
-
-def download_joytag():
-    # Ensure the correct behavior based on the existence of the local directory
-    print(f"Target directory for download: {files_for_joytagger}")
-    
-    # Call snapshot_download with specified parameters
-    path = snapshot_download(
-        "fancyfeast/joytag",  # Example repo_id
-        local_dir=files_for_joytagger,
-        force_download=False,  # Set to True if you always want to download, regardless of local copy
-        local_files_only=False,  # Set to False to allow downloading if not available locally
-        local_dir_use_symlinks="auto"  # or set to True/False based on your symlink preference
-    )
-    print(f"Model path: {path}")
-    return path
 
 
 def prepare_image(image: Image.Image, target_size: int) -> torch.Tensor:
@@ -90,10 +74,10 @@ class Joytag:
 
 	FUNCTION = "tags"
 
-	CATEGORY = "VLM Nodes/JoyTag"
+	CATEGORY = "JoyTag"
 
 	def tags(self, image, tag_number):
-		path = download_joytag()
+		path = files_for_joytagger
 		print(f"Model path: {path}")
 		model = Models.VisionModel.load_model(Path(path), device='cuda')
 		model.eval()
